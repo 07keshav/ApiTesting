@@ -1,0 +1,222 @@
+{
+	"info": {
+		"_postman_id": "3481cc76-e794-4691-a5fa-e401a2572133",
+		"name": "gorest API",
+		"description": "adding authentivction at collection level so as to avoid individual authentication writting",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26242817"
+	},
+	"item": [
+		{
+			"name": "creating a new user",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"host\",\"https://gorest.co.in/\");\r",
+							"var random = Math.random().toString(36).substring(2);\r",
+							"\r",
+							"var usr_eml = \"lala\"+random+\"@xyz.com\";\r",
+							"var usr_nm = \"lala\"+random;\r",
+							"\r",
+							"pm.environment.set(\"usr_eml\",usr_eml);\r",
+							"pm.environment.set(\"usr_nm\",usr_nm);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"pm.environment.set(\"id\",jsonData.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{usr_nm}}\",\r\n    \"gender\" : \"male\",\r\n    \"status\" : \"inactive\",\r\n    \"email\" : \"{{usr_eml}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}public/v2/users",
+					"host": [
+						"{{host}}public"
+					],
+					"path": [
+						"v2",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Checking details\", function()\r",
+							"{\r",
+							"    const jsonData = pm.response.json()\r",
+							"    pm.expect(jsonData.name).to.eql(pm.environment.get(\"usr_nm\"));\r",
+							"    pm.expect(jsonData.email).to.eql(pm.environment.get(\"usr_eml\"))\r",
+							"}\r",
+							");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://gorest.co.in/public/v2/users/{{id}}",
+					"protocol": "https",
+					"host": [
+						"gorest",
+						"co",
+						"in"
+					],
+					"path": [
+						"public",
+						"v2",
+						"users",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updating details",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var random = Math.random().toString(36).substring(2);\r",
+							"\r",
+							"var usr_eml = \"lala\"+random+\"@xyz.com\";\r",
+							"var usr_nm = \"lala\"+random;\r",
+							"\r",
+							"pm.environment.set(\"usr_eml\",usr_eml);\r",
+							"pm.environment.set(\"usr_nm\",usr_nm);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{usr_nm}}\",\r\n    \"status\":\"active\",\r\n    \"email\":\"{{usr_eml}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}public/v2/users/{{id}}",
+					"host": [
+						"{{host}}public"
+					],
+					"path": [
+						"v2",
+						"users",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleting user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.unset(\"usr_nm\");\r",
+							"pm.environment.unset(\"usr_eml\");\r",
+							"pm.environment.unset(\"id\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{host}}public/v2/users/{{id}}",
+					"host": [
+						"{{host}}public"
+					],
+					"path": [
+						"v2",
+						"users",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "33899a23877919a6f98502b0eb04039239d5f66389582e0a358227b0c0eba588",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
